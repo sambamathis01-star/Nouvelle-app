@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: travel-security-db
+    environment:
+      POSTGRES_USER: travel_user
+      POSTGRES_PASSWORD: secure_password_123
+      POSTGRES_DB: travel_security_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - travel_db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U travel_user -d travel_security_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Optionnel: Interface d'administration pgAdmin
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: travel-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@travel.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    profiles:
+      - tools
+
+volumes:
+  travel_db_data:

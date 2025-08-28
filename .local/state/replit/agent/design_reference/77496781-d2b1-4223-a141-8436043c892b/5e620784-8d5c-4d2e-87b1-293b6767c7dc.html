@@ -1,0 +1,1255 @@
+<html lang="fr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voyage Secu - Gestion de la Sécurité des Voyages</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                borderRadius: {
+                    lg: "var(--radius)",
+                    md: "calc(var(--radius) - 2px)",
+                    sm: "calc(var(--radius) - 4px)",
+                },
+                colors: {
+                    background: "var(--background)",
+                    foreground: "var(--foreground)",
+                    card: {
+                        DEFAULT: "var(--card)",
+                        foreground: "var(--card-foreground)",
+                    },
+                    popover: {
+                        DEFAULT: "var(--popover)",
+                        foreground: "var(--popover-foreground)",
+                    },
+                    primary: {
+                        DEFAULT: "var(--primary)",
+                        foreground: "var(--primary-foreground)",
+                    },
+                    secondary: {
+                        DEFAULT: "var(--secondary)",
+                        foreground: "var(--secondary-foreground)",
+                    },
+                    muted: {
+                        DEFAULT: "var(--muted)",
+                        foreground: "var(--muted-foreground)",
+                    },
+                    accent: {
+                        DEFAULT: "var(--accent)",
+                        foreground: "var(--accent-foreground)",
+                    },
+                    destructive: {
+                        DEFAULT: "var(--destructive)",
+                        foreground: "var(--destructive-foreground)",
+                    },
+                    border: "var(--border)",
+                    input: "var(--input)",
+                    ring: "var(--ring)",
+                },
+                fontFamily: {
+                    sans: ["Inter", "system-ui", "sans-serif"],
+                }
+            },
+        }
+    };
+    </script>
+    <style>
+        :root {
+            --background: hsl(210 40% 98%);
+            --foreground: hsl(222.2 84% 4.9%);
+            --card: hsl(0 0% 100%);
+            --card-foreground: hsl(222.2 84% 4.9%);
+            --popover: hsl(0 0% 100%);
+            --popover-foreground: hsl(222.2 84% 4.9%);
+            --primary: hsl(221.2 83.2% 53.3%);
+            --primary-foreground: hsl(210 40% 98%);
+            --secondary: hsl(210 40% 96%);
+            --secondary-foreground: hsl(222.2 84% 4.9%);
+            --muted: hsl(210 40% 96%);
+            --muted-foreground: hsl(215.4 16.3% 46.9%);
+            --accent: hsl(210 40% 96%);
+            --accent-foreground: hsl(222.2 84% 4.9%);
+            --destructive: hsl(0 84.2% 60.2%);
+            --destructive-foreground: hsl(210 40% 98%);
+            --border: hsl(214.3 31.8% 91.4%);
+            --input: hsl(214.3 31.8% 91.4%);
+            --ring: hsl(221.2 83.2% 53.3%);
+            --radius: 0.75rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 font-sans">
+    <!-- Mobile Navigation Header -->
+    <div class="lg:hidden">
+        <div class="flex items-center justify-between p-4 bg-white/80 backdrop-blur-sm border-b border-border">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                    <i data-lucide="plane" class="w-4 h-4 text-primary-foreground"></i>
+                </div>
+                <h1 class="text-xl font-bold text-foreground">Voyage Secu</h1>
+            </div>
+            <button id="mobile-menu-toggle" class="p-2 rounded-lg hover:bg-accent">
+                <i data-lucide="menu" class="w-5 h-5 text-muted-foreground"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="fixed inset-0 z-50 bg-black/20 backdrop-blur-sm hidden">
+            <div class="fixed left-0 top-0 w-64 h-full bg-card shadow-xl">
+                <div class="p-6">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                            <i data-lucide="plane" class="w-5 h-5 text-primary-foreground"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-bold text-card-foreground">Voyage Secu</h2>
+                            <p class="text-sm text-muted-foreground">Sécurité des voyages</p>
+                        </div>
+                    </div>
+
+                    <nav class="space-y-2">
+                        <a href="#dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary">
+                            <i data-lucide="home" class="w-5 h-5"></i>
+                            Tableau de bord
+                        </a>
+                        <a href="#trips" class="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-accent">
+                            <i data-lucide="plane" class="w-5 h-5"></i>
+                            Voyages
+                        </a>
+                        <a href="#alerts" class="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-accent">
+                            <i data-lucide="bell" class="w-5 h-5"></i>
+                            Alertes
+                        </a>
+                        <a href="#countries" class="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-accent">
+                            <i data-lucide="globe" class="w-5 h-5"></i>
+                            Pays
+                        </a>
+                        <a href="#settings" class="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-accent">
+                            <i data-lucide="settings" class="w-5 h-5"></i>
+                            Paramètres
+                        </a>
+                    </nav>
+
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <div class="flex items-center gap-3 p-3 bg-muted rounded-lg">
+                            <div class="w-8 h-8 bg-slate-300 rounded-full flex items-center justify-center">
+                                <i data-lucide="user" class="w-4 h-4 text-muted-foreground"></i>
+                            </div>
+                            <div class="text-sm">
+                                <p class="font-medium text-card-foreground">Admin</p>
+                                <p class="text-muted-foreground">admin@voyagesecu.fr</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Layout -->
+    <div class="hidden lg:flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-card/80 backdrop-blur-sm border-r border-border">
+            <div class="flex flex-col h-full">
+                <!-- Logo -->
+                <div class="p-6 border-b border-border">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
+                            <i data-lucide="plane" class="w-5 h-5 text-primary-foreground"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold text-card-foreground">Voyage Secu</h1>
+                            <p class="text-sm text-muted-foreground">Sécurité des voyages</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 p-6">
+                    <div class="space-y-2">
+                        <a href="#dashboard" class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary shadow-sm">
+                            <i data-lucide="home" class="w-5 h-5"></i>
+                            <span class="font-medium">Tableau de bord</span>
+                        </a>
+                        <a href="#trips" class="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-accent hover:text-card-foreground transition-all duration-200">
+                            <i data-lucide="plane" class="w-5 h-5"></i>
+                            <span class="font-medium">Voyages</span>
+                        </a>
+                        <a href="#alerts" class="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-accent hover:text-card-foreground transition-all duration-200">
+                            <i data-lucide="bell" class="w-5 h-5"></i>
+                            <span class="font-medium">Alertes</span>
+                        </a>
+                        <a href="#countries" class="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-accent hover:text-card-foreground transition-all duration-200">
+                            <i data-lucide="globe" class="w-5 h-5"></i>
+                            <span class="font-medium">Pays</span>
+                        </a>
+                        <a href="#settings" class="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-accent hover:text-card-foreground transition-all duration-200">
+                            <i data-lucide="settings" class="w-5 h-5"></i>
+                            <span class="font-medium">Paramètres</span>
+                        </a>
+                    </div>
+                </nav>
+
+                <!-- User Profile -->
+                <div class="p-6 border-t border-border">
+                    <div class="flex items-center gap-3 p-3 bg-muted rounded-lg">
+                        <div class="w-10 h-10 bg-slate-300 rounded-full flex items-center justify-center">
+                            <i data-lucide="user" class="w-5 h-5 text-muted-foreground"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-card-foreground truncate">Administrateur</p>
+                            <p class="text-sm text-muted-foreground truncate">admin@voyagesecu.fr</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto">
+            <main class="p-6 space-y-8">
+                <!-- Dashboard Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-card-foreground mb-2">
+                        Tableau de Bord
+                    </h1>
+                    <p class="text-muted-foreground">
+                        Vue d'ensemble de vos voyages et alertes de sécurité
+                    </p>
+                </div>
+
+                <!-- Statistics Overview -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Active Trips Stat -->
+                    <div class="relative overflow-hidden shadow-lg border-0 bg-card/80 backdrop-blur-sm hover:shadow-xl transition-shadow duration-300 rounded-lg">
+                        <div class="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8 bg-blue-500 rounded-full opacity-10"></div>
+                        <div class="p-6 relative">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-muted-foreground mb-1">
+                                        Voyages Actifs
+                                    </p>
+                                    <div class="flex items-baseline gap-2">
+                                        <p class="text-3xl font-bold text-card-foreground">3</p>
+                                        <span class="text-sm text-muted-foreground">voyages</span>
+                                    </div>
+                                </div>
+                                <div class="p-3 rounded-xl bg-blue-500 bg-opacity-20">
+                                    <i data-lucide="plane" class="w-5 h-5 text-blue-600"></i>
+                                </div>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <i data-lucide="trending-up" class="w-4 h-4 mr-1 text-green-500"></i>
+                                <span class="font-medium text-green-600">Suivi en temps réel</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Trips Stat -->
+                    <div class="relative overflow-hidden shadow-lg border-0 bg-card/80 backdrop-blur-sm hover:shadow-xl transition-shadow duration-300 rounded-lg">
+                        <div class="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8 bg-green-500 rounded-full opacity-10"></div>
+                        <div class="p-6 relative">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-muted-foreground mb-1">
+                                        Voyages Prévus
+                                    </p>
+                                    <div class="flex items-baseline gap-2">
+                                        <p class="text-3xl font-bold text-card-foreground">7</p>
+                                        <span class="text-sm text-muted-foreground">voyages</span>
+                                    </div>
+                                </div>
+                                <div class="p-3 rounded-xl bg-green-500 bg-opacity-20">
+                                    <i data-lucide="users" class="w-5 h-5 text-green-600"></i>
+                                </div>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <i data-lucide="trending-up" class="w-4 h-4 mr-1 text-green-500"></i>
+                                <span class="font-medium text-green-600">Suivi en temps réel</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Critical Alerts Stat -->
+                    <div class="relative overflow-hidden shadow-lg border-0 bg-card/80 backdrop-blur-sm hover:shadow-xl transition-shadow duration-300 rounded-lg ring-1 ring-red-200">
+                        <div class="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8 bg-red-500 rounded-full opacity-10"></div>
+                        <div class="absolute top-2 right-2 w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                        <div class="p-6 relative">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-muted-foreground mb-1">
+                                        Alertes Critiques
+                                    </p>
+                                    <div class="flex items-baseline gap-2">
+                                        <p class="text-3xl font-bold text-red-700">2</p>
+                                        <span class="text-sm text-muted-foreground">alertes</span>
+                                    </div>
+                                </div>
+                                <div class="p-3 rounded-xl bg-red-500 bg-opacity-20 relative">
+                                    <i data-lucide="alert-triangle" class="w-5 h-5 text-red-600"></i>
+                                </div>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <i data-lucide="trending-up" class="w-4 h-4 mr-1 text-red-500"></i>
+                                <span class="font-medium text-red-600">Surveillance active</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- High Risk Countries Stat -->
+                    <div class="relative overflow-hidden shadow-lg border-0 bg-card/80 backdrop-blur-sm hover:shadow-xl transition-shadow duration-300 rounded-lg">
+                        <div class="absolute top-0 right-0 w-32 h-32 transform translate-x-8 -translate-y-8 bg-amber-500 rounded-full opacity-10"></div>
+                        <div class="p-6 relative">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-muted-foreground mb-1">
+                                        Pays Haut Risque
+                                    </p>
+                                    <div class="flex items-baseline gap-2">
+                                        <p class="text-3xl font-bold text-card-foreground">5</p>
+                                        <span class="text-sm text-muted-foreground">pays</span>
+                                    </div>
+                                </div>
+                                <div class="p-3 rounded-xl bg-amber-500 bg-opacity-20">
+                                    <i data-lucide="shield" class="w-5 h-5 text-amber-600"></i>
+                                </div>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <i data-lucide="trending-up" class="w-4 h-4 mr-1 text-amber-500"></i>
+                                <span class="font-medium text-amber-600">Vigilance requise</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Dashboard Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Active & Upcoming Trips -->
+                    <div class="space-y-8">
+                        <!-- @COMPONENT: ActiveTripsCard -->
+                        <div class="shadow-lg border-0 bg-card/80 backdrop-blur-sm rounded-lg">
+                            <div class="pb-4 p-6 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="flex items-center gap-2 text-xl font-semibold text-card-foreground">
+                                        <i data-lucide="plane" class="w-6 h-6 text-blue-600"></i>
+                                        Voyages en Cours & Prévus
+                                    </h2>
+                                    <button class="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
+                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                        Nouveau Voyage
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-6">
+                                <div class="space-y-4">
+                                    <!-- Active Trips Section -->
+                                    <div>
+                                        <h3 class="font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                                            <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                                            Voyages Actifs (3)
+                                        </h3>
+                                        
+                                        <!-- Active Trip Item -->
+                                        <div class="p-4 border border-green-200 rounded-xl bg-green-50/50 mb-3 hover:shadow-md transition-shadow">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div class="flex items-center gap-2">
+                                                    <i data-lucide="user" class="w-4 h-4 text-muted-foreground"></i>
+                                                    <span class="font-medium text-card-foreground">Marie Dubois</span>
+                                                </div>
+                                                <span class="bg-green-100 text-green-800 border-green-300 px-2 py-1 rounded-full text-xs font-medium">
+                                                    En cours
+                                                </span>
+                                            </div>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                                <div class="flex items-center gap-2 text-muted-foreground">
+                                                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                                    <span>Tokyo, Japon</span>
+                                                </div>
+                                                <div class="flex items-center gap-2 text-muted-foreground">
+                                                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                                                    <span>Retour: 15 Jan</span>
+                                                </div>
+                                            </div>
+                                            <div class="mt-2 pt-2 border-t border-slate-200">
+                                                <p class="text-xs text-muted-foreground">Mission commerciale</p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Another Active Trip -->
+                                        <div class="p-4 border border-green-200 rounded-xl bg-green-50/50 mb-3 hover:shadow-md transition-shadow">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div class="flex items-center gap-2">
+                                                    <i data-lucide="user" class="w-4 h-4 text-muted-foreground"></i>
+                                                    <span class="font-medium text-card-foreground">Pierre Martin</span>
+                                                </div>
+                                                <span class="bg-green-100 text-green-800 border-green-300 px-2 py-1 rounded-full text-xs font-medium">
+                                                    En cours
+                                                </span>
+                                            </div>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                                <div class="flex items-center gap-2 text-muted-foreground">
+                                                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                                    <span>Berlin, Allemagne</span>
+                                                </div>
+                                                <div class="flex items-center gap-2 text-muted-foreground">
+                                                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                                                    <span>Retour: 20 Jan</span>
+                                                </div>
+                                            </div>
+                                            <div class="mt-2 pt-2 border-t border-slate-200">
+                                                <p class="text-xs text-muted-foreground">Formation technique</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Upcoming Trips Section -->
+                                    <div>
+                                        <h3 class="font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                                            <i data-lucide="calendar" class="w-4 h-4 text-blue-600"></i>
+                                            Prochains Voyages (7)
+                                        </h3>
+                                        
+                                        <!-- Upcoming Trip Item -->
+                                        <div class="p-4 border border-blue-200 rounded-xl bg-blue-50/50 mb-3 hover:shadow-md transition-shadow">
+                                            <div class="flex justify-between items-start mb-3">
+                                                <div class="flex items-center gap-2">
+                                                    <i data-lucide="user" class="w-4 h-4 text-muted-foreground"></i>
+                                                    <span class="font-medium text-card-foreground">Sophie Leclerc</span>
+                                                </div>
+                                                <span class="bg-blue-100 text-blue-800 border-blue-300 px-2 py-1 rounded-full text-xs font-medium">
+                                                    Prévu
+                                                </span>
+                                            </div>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                                <div class="flex items-center gap-2 text-muted-foreground">
+                                                    <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                                    <span>New York, États-Unis</span>
+                                                </div>
+                                                <div class="flex items-center gap-2 text-muted-foreground">
+                                                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                                                    <span>Départ: 25 Jan</span>
+                                                </div>
+                                            </div>
+                                            <div class="mt-2 pt-2 border-t border-slate-200">
+                                                <p class="text-xs text-muted-foreground">Conférence internationale</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="text-center pt-2">
+                                            <p class="text-sm text-muted-foreground">... et 6 autres voyages prévus</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_COMPONENT: ActiveTripsCard -->
+                    </div>
+                    
+                    <div class="space-y-8">
+                        <!-- Security Alerts Card -->
+                        <!-- @COMPONENT: SecurityAlertsCard -->
+                        <div class="shadow-lg border-0 bg-card/80 backdrop-blur-sm rounded-lg">
+                            <div class="pb-4 p-6 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="flex items-center gap-2 text-lg font-semibold text-card-foreground">
+                                        <i data-lucide="bell" class="w-5 h-5 text-amber-600"></i>
+                                        Alertes Sécurité
+                                        <span class="ml-2 bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full">
+                                            2
+                                        </span>
+                                    </h2>
+                                    <button class="border border-input hover:bg-amber-50 px-3 py-1.5 rounded-lg text-sm flex items-center gap-1 transition-colors">
+                                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                                        Voir tout
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6">
+                                <div class="space-y-3">
+                                    <!-- Critical Alert -->
+                                    <div class="p-3 border border-border rounded-lg hover:bg-accent transition-all duration-200 hover:shadow-sm cursor-pointer">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i>
+                                                <div class="flex items-center gap-2">
+                                                    <i data-lucide="globe" class="w-3 h-3 text-muted-foreground"></i>
+                                                    <span class="font-medium text-muted-foreground text-sm">Syrie</span>
+                                                </div>
+                                            </div>
+                                            <span class="bg-red-100 text-red-800 border-red-300 px-2 py-1 rounded-full text-xs font-medium">
+                                                Critique
+                                            </span>
+                                        </div>
+                                        
+                                        <h4 class="font-medium text-card-foreground text-sm mb-1">
+                                            Situation sécuritaire dégradée dans plusieurs provinces
+                                        </h4>
+                                        
+                                        <p class="text-xs text-muted-foreground mb-2">
+                                            Recrudescence des affrontements armés. Éviter tout déplacement non essentiel.
+                                        </p>
+                                        
+                                        <div class="flex justify-between items-center text-xs text-muted-foreground">
+                                            <div class="flex items-center gap-1">
+                                                <i data-lucide="calendar" class="w-3 h-3"></i>
+                                                <span>12 Jan</span>
+                                            </div>
+                                            <span class="truncate max-w-24" title="France Diplomatie">
+                                                France Diplomatie
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Warning Alert -->
+                                    <div class="p-3 border border-border rounded-lg hover:bg-accent transition-all duration-200 hover:shadow-sm cursor-pointer">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600"></i>
+                                                <div class="flex items-center gap-2">
+                                                    <i data-lucide="globe" class="w-3 h-3 text-muted-foreground"></i>
+                                                    <span class="font-medium text-muted-foreground text-sm">Myanmar</span>
+                                                </div>
+                                            </div>
+                                            <span class="bg-amber-100 text-amber-800 border-amber-300 px-2 py-1 rounded-full text-xs font-medium">
+                                                Attention
+                                            </span>
+                                        </div>
+                                        
+                                        <h4 class="font-medium text-card-foreground text-sm mb-1">
+                                            Restrictions de circulation imposées dans certaines régions
+                                        </h4>
+                                        
+                                        <p class="text-xs text-muted-foreground mb-2">
+                                            Couvre-feu nocturne en vigueur. Vérifier les conditions locales avant tout déplacement.
+                                        </p>
+                                        
+                                        <div class="flex justify-between items-center text-xs text-muted-foreground">
+                                            <div class="flex items-center gap-1">
+                                                <i data-lucide="calendar" class="w-3 h-3"></i>
+                                                <span>10 Jan</span>
+                                            </div>
+                                            <span class="truncate max-w-24" title="UK Foreign Office">
+                                                UK Foreign Office
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- @END_COMPONENT: SecurityAlertsCard -->
+                        
+                        <!-- High Risk Countries Alert -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                            <h3 class="font-medium text-amber-800 mb-2 flex items-center gap-2">
+                                <i data-lucide="shield" class="w-4 h-4"></i>
+                                Pays à Surveiller
+                            </h3>
+                            <div class="space-y-1">
+                                <div class="text-sm text-amber-700">
+                                    Afghanistan - Niveau Critique
+                                </div>
+                                <div class="text-sm text-amber-700">
+                                    Syrie - Niveau Critique
+                                </div>
+                                <div class="text-sm text-amber-700">
+                                    Myanmar - Niveau Élevé
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trip Management Section (Hidden by default, shown when navigating to trips) -->
+                <div id="trips-section" class="hidden">
+                    <div class="mb-6">
+                        <h1 class="text-3xl font-bold text-card-foreground mb-2">Gestion des Voyages</h1>
+                        <p class="text-muted-foreground">Créez, modifiez et suivez tous les voyages de votre équipe</p>
+                    </div>
+
+                    <!-- Trip Filters -->
+                    <div class="mb-6 border-0 bg-card/80 backdrop-blur-sm rounded-lg">
+                        <div class="p-4">
+                            <div class="flex flex-col md:flex-row gap-4 items-center">
+                                <div class="flex items-center gap-2">
+                                    <i data-lucide="filter" class="w-4 h-4 text-muted-foreground"></i>
+                                    <span class="text-sm font-medium text-muted-foreground">Filtres:</span>
+                                </div>
+                                
+                                <div class="flex flex-wrap gap-4">
+                                    <div class="min-w-40">
+                                        <select class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground">
+                                            <option>Tous les statuts</option>
+                                            <option>Prévus</option>
+                                            <option>En cours</option>
+                                            <option>Terminés</option>
+                                            <option>Annulés</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="min-w-40">
+                                        <select class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground">
+                                            <option>Toutes les périodes</option>
+                                            <option>Cette semaine</option>
+                                            <option>Ce mois</option>
+                                        </select>
+                                    </div>
+
+                                    <button class="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2">
+                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                        Nouveau Voyage
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trip Form (Hidden by default) -->
+                    <div id="trip-form" class="hidden mb-6 shadow-lg border-0 bg-card/90 backdrop-blur-sm rounded-lg">
+                        <div class="p-6 border-b border-border">
+                            <h2 class="flex items-center gap-2 text-xl font-semibold text-card-foreground">
+                                <i data-lucide="user" class="w-5 h-5 text-blue-600"></i>
+                                Nouveau Voyage
+                            </h2>
+                        </div>
+                        <div class="p-6">
+                            <form class="space-y-6">
+                                <!-- Traveler Information -->
+                                <div class="space-y-4">
+                                    <h3 class="font-semibold text-muted-foreground flex items-center gap-2">
+                                        <i data-lucide="user" class="w-4 h-4"></i>
+                                        Informations du Voyageur
+                                    </h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-card-foreground mb-2">Nom du voyageur *</label>
+                                            <input type="text" class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground" placeholder="Nom complet" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-card-foreground mb-2">Email</label>
+                                            <input type="email" class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground" placeholder="email@exemple.com">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Destination -->
+                                <div class="border-t border-border pt-6 space-y-4">
+                                    <h3 class="font-semibold text-muted-foreground flex items-center gap-2">
+                                        <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                        Destination
+                                    </h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-card-foreground mb-2">Pays *</label>
+                                            <select class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground" required>
+                                                <option>Sélectionner un pays</option>
+                                                <option>France</option>
+                                                <option>Allemagne</option>
+                                                <option>Japon</option>
+                                                <option>États-Unis</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-card-foreground mb-2">Ville</label>
+                                            <input type="text" class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground" placeholder="Ville de destination">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Dates -->
+                                <div class="border-t border-border pt-6 space-y-4">
+                                    <h3 class="font-semibold text-muted-foreground flex items-center gap-2">
+                                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                                        Dates et Détails
+                                    </h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-card-foreground mb-2">Date de départ *</label>
+                                            <input type="date" class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-card-foreground mb-2">Date de retour *</label>
+                                            <input type="date" class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-card-foreground mb-2">Motif du voyage</label>
+                                            <input type="text" class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground" placeholder="Réunion, formation, etc.">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-card-foreground mb-2">Statut</label>
+                                            <select class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground">
+                                                <option value="planned">Prévu</option>
+                                                <option value="in_progress">En cours</option>
+                                                <option value="completed">Terminé</option>
+                                                <option value="cancelled">Annulé</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Emergency Contact -->
+                                <div class="border-t border-border pt-6 space-y-4">
+                                    <h3 class="font-semibold text-muted-foreground flex items-center gap-2">
+                                        <i data-lucide="phone" class="w-4 h-4"></i>
+                                        Contact d'Urgence
+                                    </h3>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-card-foreground mb-2">Nom</label>
+                                            <input type="text" class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground" placeholder="Nom complet">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-card-foreground mb-2">Téléphone</label>
+                                            <input type="tel" class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground" placeholder="+33 6 12 34 56 78">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-card-foreground mb-2">Relation</label>
+                                            <select class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground">
+                                                <option>Relation</option>
+                                                <option>Conjoint(e)</option>
+                                                <option>Parent</option>
+                                                <option>Enfant</option>
+                                                <option>Famille</option>
+                                                <option>Collègue</option>
+                                                <option>Ami(e)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Form Actions -->
+                                <div class="flex justify-end gap-3 pt-4">
+                                    <button type="button" class="border border-input px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-accent transition-colors">
+                                        <i data-lucide="x" class="w-4 h-4"></i>
+                                        Annuler
+                                    </button>
+                                    <button type="submit" class="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg flex items-center gap-2">
+                                        <i data-lucide="save" class="w-4 h-4"></i>
+                                        Créer
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Trips List -->
+                    <div class="space-y-4">
+                        <!-- Trip Item 1 -->
+                        <div class="shadow-md border-0 bg-card/80 backdrop-blur-sm hover:shadow-lg transition-shadow rounded-lg">
+                            <div class="p-6">
+                                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <i data-lucide="user" class="w-5 h-5 text-muted-foreground"></i>
+                                            <h3 class="font-bold text-lg text-card-foreground">Marie Dubois</h3>
+                                            <span class="bg-green-100 text-green-800 border-green-300 px-2 py-1 rounded-full text-xs font-medium">
+                                                En cours
+                                            </span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-muted-foreground">
+                                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                            <span class="font-medium">Tokyo, Japon</span>
+                                            <div class="w-2 h-2 rounded-full bg-current text-yellow-600"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="relative">
+                                        <button class="p-2 hover:bg-accent rounded-lg">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                                        <div>
+                                            <p class="text-xs text-muted-foreground">Départ</p>
+                                            <p class="font-medium">05 Jan 2025</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                                        <div>
+                                            <p class="text-xs text-muted-foreground">Retour</p>
+                                            <p class="font-medium">15 Jan 2025</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i data-lucide="building" class="w-4 h-4"></i>
+                                        <div>
+                                            <p class="text-xs text-muted-foreground">Hébergement</p>
+                                            <p class="font-medium truncate">Hotel Nikko Tokyo</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i data-lucide="phone" class="w-4 h-4"></i>
+                                        <div>
+                                            <p class="text-xs text-muted-foreground">Urgence</p>
+                                            <p class="font-medium">Jean Dubois</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="pt-3 border-t border-border">
+                                    <p class="text-sm text-muted-foreground">
+                                        <span class="font-medium">Motif:</span> Mission commerciale
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trip Item 2 -->
+                        <div class="shadow-md border-0 bg-card/80 backdrop-blur-sm hover:shadow-lg transition-shadow rounded-lg">
+                            <div class="p-6">
+                                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                                    <div>
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <i data-lucide="user" class="w-5 h-5 text-muted-foreground"></i>
+                                            <h3 class="font-bold text-lg text-card-foreground">Pierre Martin</h3>
+                                            <span class="bg-blue-100 text-blue-800 border-blue-300 px-2 py-1 rounded-full text-xs font-medium">
+                                                Prévu
+                                            </span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-muted-foreground">
+                                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                                            <span class="font-medium">New York, États-Unis</span>
+                                            <div class="w-2 h-2 rounded-full bg-current text-green-600"></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="relative">
+                                        <button class="p-2 hover:bg-accent rounded-lg">
+                                            <i data-lucide="more-vertical" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                                        <div>
+                                            <p class="text-xs text-muted-foreground">Départ</p>
+                                            <p class="font-medium">25 Jan 2025</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                                        <div>
+                                            <p class="text-xs text-muted-foreground">Retour</p>
+                                            <p class="font-medium">30 Jan 2025</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i data-lucide="building" class="w-4 h-4"></i>
+                                        <div>
+                                            <p class="text-xs text-muted-foreground">Hébergement</p>
+                                            <p class="font-medium truncate">Marriott Times Square</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                                        <i data-lucide="phone" class="w-4 h-4"></i>
+                                        <div>
+                                            <p class="text-xs text-muted-foreground">Urgence</p>
+                                            <p class="font-medium">Claire Martin</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="pt-3 border-t border-border">
+                                    <p class="text-sm text-muted-foreground">
+                                        <span class="font-medium">Motif:</span> Conférence technologique
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Countries Section (Hidden by default) -->
+                <div id="countries-section" class="hidden">
+                    <div class="mb-6">
+                        <h1 class="text-3xl font-bold text-card-foreground mb-2">Gestion des Pays</h1>
+                        <p class="text-muted-foreground">Consultez les niveaux de risque et informations de sécurité par pays</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Countries List -->
+                        <div class="space-y-4">
+                            <!-- Search and Filters -->
+                            <div class="bg-card/80 backdrop-blur-sm rounded-lg p-4">
+                                <div class="flex gap-4">
+                                    <div class="flex-1">
+                                        <input type="text" placeholder="Rechercher un pays..." class="w-full px-3 py-2 border border-input rounded-lg bg-background text-card-foreground">
+                                    </div>
+                                    <select class="px-3 py-2 border border-input rounded-lg bg-background text-card-foreground">
+                                        <option>Tous les niveaux</option>
+                                        <option>Faible</option>
+                                        <option>Moyen</option>
+                                        <option>Élevé</option>
+                                        <option>Critique</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Country Items -->
+                            <div class="space-y-3">
+                                <!-- High Risk Country -->
+                                <div class="p-4 bg-card/80 backdrop-blur-sm rounded-lg border border-border hover:shadow-md transition-shadow cursor-pointer" data-country="syria">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h3 class="font-semibold text-card-foreground flex items-center gap-2">
+                                            <i data-lucide="map-pin" class="w-4 h-4 text-muted-foreground"></i>
+                                            Syrie
+                                        </h3>
+                                        <span class="bg-red-100 text-red-800 border-red-300 px-2 py-1 rounded-full text-xs font-medium">
+                                            <i data-lucide="alert-triangle" class="w-3 h-3 mr-1 inline"></i>
+                                            Critique
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-muted-foreground">
+                                        Situation sécuritaire très dégradée. Voyage fortement déconseillé.
+                                    </p>
+                                    <div class="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                                        <span>3 risques sécuritaires</span>
+                                        <span>2 risques sanitaires</span>
+                                    </div>
+                                </div>
+
+                                <!-- Medium Risk Country -->
+                                <div class="p-4 bg-card/80 backdrop-blur-sm rounded-lg border border-border hover:shadow-md transition-shadow cursor-pointer" data-country="japan">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h3 class="font-semibold text-card-foreground flex items-center gap-2">
+                                            <i data-lucide="map-pin" class="w-4 h-4 text-muted-foreground"></i>
+                                            Japon
+                                        </h3>
+                                        <span class="bg-yellow-100 text-yellow-800 border-yellow-300 px-2 py-1 rounded-full text-xs font-medium">
+                                            <i data-lucide="alert-triangle" class="w-3 h-3 mr-1 inline"></i>
+                                            Moyen
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-muted-foreground">
+                                        Destination généralement sûre. Vigilance normale recommandée.
+                                    </p>
+                                    <div class="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                                        <span>1 risque sécuritaire</span>
+                                        <span>0 risque sanitaire</span>
+                                    </div>
+                                </div>
+
+                                <!-- Low Risk Country -->
+                                <div class="p-4 bg-card/80 backdrop-blur-sm rounded-lg border border-border hover:shadow-md transition-shadow cursor-pointer" data-country="germany">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <h3 class="font-semibold text-card-foreground flex items-center gap-2">
+                                            <i data-lucide="map-pin" class="w-4 h-4 text-muted-foreground"></i>
+                                            Allemagne
+                                        </h3>
+                                        <span class="bg-green-100 text-green-800 border-green-300 px-2 py-1 rounded-full text-xs font-medium">
+                                            <i data-lucide="check-circle" class="w-3 h-3 mr-1 inline"></i>
+                                            Faible
+                                        </span>
+                                    </div>
+                                    <p class="text-sm text-muted-foreground">
+                                        Destination très sûre. Aucune restriction particulière.
+                                    </p>
+                                    <div class="mt-2 flex items-center gap-4 text-xs text-muted-foreground">
+                                        <span>0 risque sécuritaire</span>
+                                        <span>0 risque sanitaire</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Country Details Panel -->
+                        <div class="shadow-lg border-0 bg-card/80 backdrop-blur-sm rounded-lg">
+                            <div class="p-6 border-b border-border">
+                                <div class="flex items-center justify-between">
+                                    <h2 class="flex items-center gap-2 text-xl font-semibold text-card-foreground">
+                                        <i data-lucide="map-pin" class="w-5 h-5 text-blue-600"></i>
+                                        <span id="country-name">Syrie</span>
+                                    </h2>
+                                    <span id="country-badge" class="bg-red-100 text-red-800 border-red-300 px-3 py-1 rounded-full text-sm font-medium">
+                                        <i data-lucide="alert-triangle" class="w-3 h-3 mr-1 inline"></i>
+                                        Critique
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <div class="p-6 space-y-6">
+                                <!-- Travel Advisory -->
+                                <div>
+                                    <h4 class="font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                                        <i data-lucide="alert-triangle" class="w-4 h-4"></i>
+                                        Conseil aux Voyageurs
+                                    </h4>
+                                    <div class="p-3 bg-amber-50 rounded-lg border border-amber-200">
+                                        <p class="text-muted-foreground text-sm">
+                                            Le ministère des Affaires étrangères déconseille formellement tout déplacement en Syrie en raison des risques terroristes, de l'instabilité politique et des conflits armés en cours.
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Security Risks -->
+                                <div>
+                                    <h4 class="font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                                        <i data-lucide="alert-triangle" class="w-4 h-4 text-red-600"></i>
+                                        Risques de Sécurité (3)
+                                    </h4>
+                                    <div class="space-y-2">
+                                        <div class="flex items-start gap-2 p-2 bg-red-50 rounded-lg">
+                                            <i data-lucide="alert-triangle" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"></i>
+                                            <span class="text-sm text-muted-foreground">Risque terroriste très élevé</span>
+                                        </div>
+                                        <div class="flex items-start gap-2 p-2 bg-red-50 rounded-lg">
+                                            <i data-lucide="alert-triangle" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"></i>
+                                            <span class="text-sm text-muted-foreground">Conflit armé généralisé</span>
+                                        </div>
+                                        <div class="flex items-start gap-2 p-2 bg-red-50 rounded-lg">
+                                            <i data-lucide="alert-triangle" class="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0"></i>
+                                            <span class="text-sm text-muted-foreground">Enlèvements et détentions arbitraires</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Health Risks -->
+                                <div>
+                                    <h4 class="font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                                        <i data-lucide="heart" class="w-4 h-4 text-pink-600"></i>
+                                        Risques Sanitaires (2)
+                                    </h4>
+                                    <div class="space-y-2">
+                                        <div class="flex items-start gap-2 p-2 bg-pink-50 rounded-lg">
+                                            <i data-lucide="heart" class="w-4 h-4 text-pink-500 mt-0.5 flex-shrink-0"></i>
+                                            <span class="text-sm text-muted-foreground">Système de santé défaillant</span>
+                                        </div>
+                                        <div class="flex items-start gap-2 p-2 bg-pink-50 rounded-lg">
+                                            <i data-lucide="heart" class="w-4 h-4 text-pink-500 mt-0.5 flex-shrink-0"></i>
+                                            <span class="text-sm text-muted-foreground">Risques d'épidémies</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Embassy Information -->
+                                <div>
+                                    <div class="border-t border-border pt-4">
+                                        <h4 class="font-semibold text-muted-foreground mb-3 flex items-center gap-2">
+                                            <i data-lucide="building" class="w-4 h-4 text-blue-600"></i>
+                                            Ambassade de France
+                                        </h4>
+                                        <div class="space-y-3 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                            <div class="flex items-start gap-2">
+                                                <i data-lucide="map-pin" class="w-4 h-4 text-muted-foreground mt-0.5"></i>
+                                                <div>
+                                                    <p class="text-xs text-muted-foreground uppercase tracking-wide">Adresse</p>
+                                                    <p class="text-sm text-muted-foreground">Ambassade fermée temporairement</p>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-start gap-2">
+                                                <i data-lucide="phone" class="w-4 h-4 text-muted-foreground mt-0.5"></i>
+                                                <div>
+                                                    <p class="text-xs text-muted-foreground uppercase tracking-wide">Téléphone d'urgence</p>
+                                                    <a href="tel:+33153592300" class="text-sm text-muted-foreground font-mono hover:text-blue-600">
+                                                        +33 1 53 59 23 00
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-start gap-2">
+                                                <i data-lucide="mail" class="w-4 h-4 text-muted-foreground mt-0.5"></i>
+                                                <div>
+                                                    <p class="text-xs text-muted-foreground uppercase tracking-wide">Email</p>
+                                                    <a href="mailto:urgence@diplomatie.gouv.fr" class="text-sm text-blue-600 hover:text-blue-800 underline">
+                                                        urgence@diplomatie.gouv.fr
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Mobile menu toggle
+        (() => {
+            const toggleButton = document.getElementById('mobile-menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (toggleButton && mobileMenu) {
+                toggleButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close menu when clicking outside
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target === mobileMenu) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+
+                // Close menu when clicking navigation links
+                const navLinks = mobileMenu.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+        })();
+
+        // Section navigation simulation
+        (() => {
+            const sections = ['dashboard', 'trips', 'countries'];
+            const navLinks = document.querySelectorAll('a[href^="#"]');
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetSection = link.getAttribute('href').substring(1);
+                    
+                    // Hide all sections
+                    sections.forEach(section => {
+                        const element = document.getElementById(`${section}-section`);
+                        if (element) {
+                            element.classList.add('hidden');
+                        }
+                    });
+                    
+                    // Show target section or dashboard
+                    if (targetSection === 'dashboard') {
+                        // Show main dashboard content
+                        const dashboardContent = document.querySelector('main > .space-y-8');
+                        if (dashboardContent) {
+                            dashboardContent.style.display = 'block';
+                        }
+                    } else {
+                        // Hide dashboard content
+                        const dashboardContent = document.querySelector('main > .space-y-8');
+                        if (dashboardContent) {
+                            dashboardContent.style.display = 'none';
+                        }
+                        
+                        // Show specific section
+                        const targetElement = document.getElementById(`${targetSection}-section`);
+                        if (targetElement) {
+                            targetElement.classList.remove('hidden');
+                        }
+                    }
+                    
+                    // Update navigation active state
+                    navLinks.forEach(navLink => {
+                        const parent = navLink.parentElement || navLink;
+                        parent.classList.remove('bg-primary/10', 'text-primary', 'shadow-sm');
+                        parent.classList.add('text-muted-foreground', 'hover:bg-accent', 'hover:text-card-foreground');
+                    });
+                    
+                    const activeParent = link.parentElement || link;
+                    activeParent.classList.add('bg-primary/10', 'text-primary', 'shadow-sm');
+                    activeParent.classList.remove('text-muted-foreground', 'hover:bg-accent', 'hover:text-card-foreground');
+                });
+            });
+        })();
+
+        // Trip form toggle
+        (() => {
+            const newTripButtons = document.querySelectorAll('button');
+            const tripForm = document.getElementById('trip-form');
+            
+            newTripButtons.forEach(button => {
+                if (button.textContent.includes('Nouveau Voyage')) {
+                    button.addEventListener('click', () => {
+                        if (tripForm) {
+                            tripForm.classList.toggle('hidden');
+                        }
+                    });
+                }
+            });
+            
+            // Form cancel button
+            const cancelButton = tripForm?.querySelector('button[type="button"]');
+            if (cancelButton) {
+                cancelButton.addEventListener('click', () => {
+                    tripForm.classList.add('hidden');
+                });
+            }
+        })();
+
+        // Country selection simulation
+        (() => {
+            const countryItems = document.querySelectorAll('[data-country]');
+            const countryName = document.getElementById('country-name');
+            const countryBadge = document.getElementById('country-badge');
+            
+            const countryData = {
+                syria: {
+                    name: 'Syrie',
+                    level: 'Critique',
+                    badgeClass: 'bg-red-100 text-red-800 border-red-300',
+                    icon: 'alert-triangle'
+                },
+                japan: {
+                    name: 'Japon',
+                    level: 'Moyen',
+                    badgeClass: 'bg-yellow-100 text-yellow-800 border-yellow-300',
+                    icon: 'alert-triangle'
+                },
+                germany: {
+                    name: 'Allemagne',
+                    level: 'Faible',
+                    badgeClass: 'bg-green-100 text-green-800 border-green-300',
+                    icon: 'check-circle'
+                }
+            };
+            
+            countryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const countryKey = item.getAttribute('data-country');
+                    const data = countryData[countryKey];
+                    
+                    if (data && countryName && countryBadge) {
+                        countryName.textContent = data.name;
+                        countryBadge.className = `${data.badgeClass} px-3 py-1 rounded-full text-sm font-medium`;
+                        countryBadge.innerHTML = `<i data-lucide="${data.icon}" class="w-3 h-3 mr-1 inline"></i>${data.level}`;
+                        
+                        // Re-initialize icons for the updated badge
+                        lucide.createIcons();
+                    }
+                    
+                    // Update active state
+                    countryItems.forEach(otherItem => {
+                        otherItem.classList.remove('ring-2', 'ring-blue-500');
+                    });
+                    item.classList.add('ring-2', 'ring-blue-500');
+                });
+            });
+        })();
+
+        // TODO: Implement business logic, API calls, or state management for:
+        // - Form submissions and validation
+        // - Data fetching and caching
+        // - Real-time security alerts
+        // - Trip status updates
+        // - Country risk level monitoring
+        // - User authentication
+        // - Error handling and retry logic
+        // - Offline support
+        // - Push notifications
+    </script>
+</body>
+</html>
